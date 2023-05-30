@@ -93,7 +93,7 @@ func (pb *ParkBus) MorningBusSubscribe() {
 		Get(getMorningBusAPI)
 
 	if err != nil {
-		log.Println("获取早班车车次信息错误:", err)
+		log.Printf("获取早班(%s)车车次信息错误: %s\n", pb.morningBusTime, err.Error())
 		return
 	}
 
@@ -105,11 +105,11 @@ func (pb *ParkBus) MorningBusSubscribe() {
 				url := fmt.Sprintf(selectBusAPI, busInfo.Id)
 				selectBusResp, err := pb.HttpClient.R().Get(url)
 				if err != nil {
-					log.Println("早班车车票锁定错误: ", err)
+					log.Printf("早班车(%s)车票锁定错误: %s\n", pb.morningBusTime, err.Error())
 					return
 				}
 				if !selectBusResp.IsSuccessState() {
-					fmt.Printf("早班车车次锁定失败 : %v\n", resp.String())
+					fmt.Printf("早班车(%s)车次锁定失败 : %s\n", pb.morningBusTime, resp.String())
 				}
 				fmt.Printf("早班车(%s)预约成功。\n", pb.morningBusTime)
 				fmt.Println(selectBusResp.String())
@@ -132,7 +132,7 @@ func (pb *ParkBus) AfternoonBusSubscribe() {
 		Get(getAfternoonBusAPI)
 
 	if err != nil {
-		fmt.Println("获取晚班车车次信息错误: ", err)
+		fmt.Printf("获取晚班车(%s)车次信息错误: %s\n", pb.afternoonBusTime, err.Error())
 		return
 	}
 
@@ -144,11 +144,11 @@ func (pb *ParkBus) AfternoonBusSubscribe() {
 				url := fmt.Sprintf(selectBusAPI, busInfo.Id)
 				selectBusResp, err := pb.HttpClient.R().Get(url)
 				if err != nil {
-					log.Println("晚班车车票锁定错误: ", err)
+					fmt.Printf("晚班车(%s)车票锁定错误: %s \n", pb.afternoonBusTime, err.Error())
 					return
 				}
 				if !selectBusResp.IsSuccessState() {
-					fmt.Println("晚班车车次锁定失败。")
+					fmt.Printf("晚班车(%s)车次锁定失败: %s\n", pb.afternoonBusTime, resp.String())
 				}
 				fmt.Printf("晚班车(%s)抢票成功。\n", pb.afternoonBusTime)
 				fmt.Println(selectBusResp.String())
