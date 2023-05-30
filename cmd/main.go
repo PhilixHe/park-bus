@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	conf "park-bus/config"
+	"park-bus/cron_job"
 	"park-bus/pkg/version"
 	"time"
 )
@@ -83,6 +84,9 @@ func runServer() {
 		Addr:    "127.0.0.1:8000",
 		Handler: r,
 	}
+
+	// 启动定时任务
+	cron_job.Run()
 
 	go func() {
 		// 服务连接

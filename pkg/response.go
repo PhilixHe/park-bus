@@ -1,7 +1,7 @@
 package pkg
 
 type Result struct {
-	Code int    `json:"code"`
+	Code string `json:"code"`
 	Msg  string `json:"msg"`
 }
 

@@ -10,7 +10,13 @@ import (
 var Cfg *Config
 
 type Config struct {
-	Authorization []string `mapstructure:"Authorization" validate:"required"`
+	Passengers []Passenger `mapstructure:"passengers" validate:"required"`
+}
+
+type Passenger struct {
+	Token            string `mapstructure:"token" validate:"required"`
+	MorningBusTime   string `mapstructure:"morning_bus_time" validate:"required"`
+	AfternoonBusTime string `mapstructure:"afternoon_bus_time" validate:"required"`
 }
 
 // LoadConfig from config file .
@@ -24,9 +30,9 @@ func LoadConfig(cfgFile string) {
 			os.Exit(1)
 		}
 
-		// Search config in home directory with name ".cumulx" (without extension).
+		// Search config in home directory with name ".config.yaml" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigName(".cumulx")
+		viper.SetConfigName(".config")
 		viper.SetConfigType("yaml")
 	}
 
