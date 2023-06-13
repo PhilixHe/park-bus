@@ -18,3 +18,17 @@ type BusInfo struct {
 	BusAddress    string `json:"busAddress"`
 	Announcements string `json:"announcements"`
 }
+
+type LoginRest struct {
+	Result
+	Data LoginData `json:"data"`
+}
+
+type LoginData struct {
+	RefreshToken string `json:"refresh_token"`
+	YdPwd        string `json:"yd_pwd"`
+	OrgType      string `json:"org_type"`
+	YdName       string `json:"yd_name"`
+	Token        string `json:"token"`
+	Username     string `json:"username"`
+}

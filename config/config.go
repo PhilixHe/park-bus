@@ -14,7 +14,8 @@ type Config struct {
 }
 
 type Passenger struct {
-	Token            string `mapstructure:"token" validate:"required"`
+	UserName         string `mapstructure:"username" validate:"required"`
+	Password         string `mapstructure:"password" validate:"required"`
 	MorningBusTime   string `mapstructure:"morning_bus_time" validate:"required"`
 	AfternoonBusTime string `mapstructure:"afternoon_bus_time" validate:"required"`
 }

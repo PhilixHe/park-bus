@@ -1,4 +1,5 @@
 passengers:
-  - token: '21m2mn1n1ln2l1542mll'
+  - username: 'username'
+    password: "123456"
     morning_bus_time: '08:30'
     afternoon_bus_time: '17:50'
