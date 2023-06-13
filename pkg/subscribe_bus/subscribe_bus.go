@@ -206,6 +206,6 @@ func (pb *ParkBus) AfternoonBusSubscribe() {
 		}
 	}
 
-	fmt.Printf("晚班车(%s)时间已经过期，抢票失败。\n", pb.afternoonBusTime)
+	fmt.Printf("当前时间：%s, 晚班车(%s)，抢票失败。\n", time.Now().String(), pb.afternoonBusTime)
 	return
 }
