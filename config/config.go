@@ -2,9 +2,10 @@ package config
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
-	"os"
 )
 
 var Cfg *Config
@@ -14,8 +15,9 @@ type Config struct {
 }
 
 type Passenger struct {
-	UserName         string `mapstructure:"username" validate:"required"`
-	Password         string `mapstructure:"password" validate:"required"`
+	// UserName         string `mapstructure:"username" validate:"required"`
+	// Password         string `mapstructure:"password" validate:"required"`
+	Token            string `mapstructure:"token" validate:"required"`
 	MorningBusTime   string `mapstructure:"morning_bus_time" validate:"required"`
 	AfternoonBusTime string `mapstructure:"afternoon_bus_time" validate:"required"`
 }

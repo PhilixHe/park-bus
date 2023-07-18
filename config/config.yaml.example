@@ -1,5 +1,4 @@
 passengers:
-  - username: 'username'
-    password: "123456"
+  - token: "<APP认证token>"
     morning_bus_time: '08:30'
     afternoon_bus_time: '17:50'

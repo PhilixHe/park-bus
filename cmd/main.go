@@ -3,16 +3,18 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/spf13/cobra"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"time"
+
 	conf "park-bus/config"
 	"park-bus/cron_job"
 	"park-bus/pkg/version"
-	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/cobra"
 )
 
 const ErrExitCode = 1

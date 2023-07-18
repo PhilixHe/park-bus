@@ -2,16 +2,18 @@ package subscribe_bus
 
 import (
 	"fmt"
-	"github.com/imroc/req/v3"
 	"log"
-	"park-bus/pkg"
 	"time"
+
+	"park-bus/pkg"
+
+	"github.com/imroc/req/v3"
 )
 
 var (
 	loginAPI           = "http://gl.yichengshidai.com/api/auth/login"
-	getMorningBusAPI   = "http://gl.yichengshidai.com/api/api-oa/park-bus-app/appointmentList/1"
-	getAfternoonBusAPI = "http://gl.yichengshidai.com/api/api-oa/park-bus-app/appointmentList/2"
+	getMorningBusAPI   = "http://gl.yichengshidai.com/api/api-oa/park-bus-app/appointmentList/1/1"
+	getAfternoonBusAPI = "http://gl.yichengshidai.com/api/api-oa/park-bus-app/appointmentList/2/1"
 	selectBusAPI       = "http://gl.yichengshidai.com/api/api-oa/park-bus-app/appointmentBus/%d"
 )
 
@@ -25,24 +27,24 @@ type ParkBus struct {
 }
 
 // NewParkBus 初始化班车预约
-func NewParkBus(username, password, morningBusTime, afternoonBusTime string) ParkBus {
+func NewParkBus(token, morningBusTime, afternoonBusTime string) ParkBus {
 	httpClient := req.NewClient()
 	httpClient.SetTimeout(5 * time.Second)
 	httpClient.SetCommonHeader("User-Agent", "User-Agent\tMozilla/5.0 (iPhone; CPU iPhone OS 15_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Html5Plus/1.0 (Immersed/20) uni-app")
 	httpClient.SetCommonHeader("Content-Type", "application/json;charset=UTF-8")
-
+	httpClient.SetCommonBearerAuthToken(token)
 	httpClient.SetCommonRetryCount(10).
 		SetCommonRetryBackoffInterval(1*time.Second, 5*time.Second).
 		SetCommonRetryFixedInterval(2 * time.Second)
 
 	return ParkBus{
 		HttpClient:       httpClient,
-		UserName:         username,
-		Password:         password,
+		Token:            token,
 		morningBusTime:   morningBusTime,
 		afternoonBusTime: afternoonBusTime}
 }
 
+// Login abandon
 func (pb *ParkBus) Login() bool {
 	loginResp := pkg.LoginRest{}
 	resp, err := pb.HttpClient.R().
@@ -65,7 +67,7 @@ func (pb *ParkBus) Login() bool {
 		fmt.Println(resp.String())
 		return false
 	}
-	//fmt.Printf("登录成功: %s\n", resp.String())
+	// fmt.Printf("登录成功: %s\n", resp.String())
 	pb.HttpClient.SetCommonBearerAuthToken(loginResp.Data.Token)
 	return true
 }
@@ -99,8 +101,9 @@ func (pb *ParkBus) noTicketRetry(resp *req.Response, err error) bool {
 		fmt.Printf("获取车次列表失败: %s\n", resp.String())
 		// 重新登录
 		if busList.Code == "0004" {
-			fmt.Println("重新登录...")
-			return pb.Login()
+			// fmt.Println("重新登录...")
+			fmt.Println("认证信息失败。")
+			return false
 		}
 		return true
 	}
@@ -135,7 +138,7 @@ func (pb *ParkBus) MorningBusSubscribe() {
 	// 获取班车列表
 	resp, err := pb.HttpClient.R().
 		SetSuccessResult(&busList).
-		//SetBearerAuthToken(pb.Token).
+		// SetBearerAuthToken(pb.Token).
 		AddRetryCondition(pb.noTicketRetry). // 班车余票获取
 		Get(getMorningBusAPI)
 
